@@ -1,7 +1,7 @@
 version: '2.2'
 services:
-  relay:
-    image: chriswayg/tor-server
+  torbridge:
+    image: chrisbensch/docker-tor
     init: true
     restart: always
     network_mode: host
