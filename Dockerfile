@@ -12,39 +12,40 @@ ENV TERM=xterm
 
 # Install prerequisites
 RUN apt-get update \
- && apt-get install --no-install-recommends --no-install-suggests -y \
-        apt-transport-https \
-        ca-certificates \
-        dirmngr \
-        apt-utils \
-        gnupg \
-        curl \
- # Install tor with GeoIP and obfs4proxy & backup torrc \
- && apt-get update \
- && apt-get install --no-install-recommends --no-install-suggests -y \
-        pwgen \
-        iputils-ping \
-        tor \
-        tor-geoipdb \
-        obfs4proxy \
- && mkdir -pv /usr/local/etc/tor/ \
- && mv -v /etc/tor/torrc /usr/local/etc/tor/torrc.sample \
- && apt-get purge --auto-remove -y \
-        apt-transport-https \
-        dirmngr \
-        apt-utils \
-        gnupg \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/* \
- # Rename Debian unprivileged user to tord \
- && usermod -l tord debian-tor \
- && groupmod -n tord debian-tor
+  && apt-get install --no-install-recommends --no-install-suggests -y \
+  apt-transport-https \
+  ca-certificates \
+  dirmngr \
+  apt-utils \
+  gnupg \
+  curl \
+  # Install tor with GeoIP and obfs4proxy & backup torrc \
+  && apt-get update \
+  && apt-get install --no-install-recommends --no-install-suggests -y \
+  pwgen \
+  iputils-ping \
+  tor \
+  tor-geoipdb \
+  obfs4proxy \
+  && mkdir -pv /usr/local/etc/tor/ \
+  && mv -v /etc/tor/torrc /usr/local/etc/tor/torrc.sample \
+  && apt-get purge --auto-remove -y \
+  apt-transport-https \
+  dirmngr \
+  apt-utils \
+  gnupg \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* \
+  # Rename Debian unprivileged user to tord \
+  && usermod -l tord debian-tor \
+  && groupmod -n tord debian-tor
 
 # Copy Tor configuration file
 COPY ./torrc /etc/tor/torrc
 
 # Copy docker-entrypoint
 COPY ./scripts/ /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint
 
 # Persist data
 VOLUME /etc/tor /var/lib/tor
